@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using WebApplication4.Data;
-using WebApplication4.Models;
-using WebApplication4.Services;
+using WebApplication5.Data;
+using WebApplication5.Models;
+using WebApplication5.Services;
 using WebApplication1.Data;
+using Microsoft.AspNetCore.Identity;
+using WebApplication4.Data;
 
-namespace WebApplication4
+namespace WebApplication5
 {
     public class Startup
     {
@@ -63,7 +61,7 @@ namespace WebApplication4
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, EventsDbContext context)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, EventsDbContext eventsContext, ApplicationDbContext appContext)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -87,6 +85,10 @@ namespace WebApplication4
 
             app.UseIdentity();
 
+            DbInitializer.Initialize(eventsContext);
+
+            RolesData.SeedRoles(app.ApplicationServices).Wait();
+
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
@@ -95,7 +97,7 @@ namespace WebApplication4
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            DbInitializer.Initialize(context);
+            
         }
     }
 }

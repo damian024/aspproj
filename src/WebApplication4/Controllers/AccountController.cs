@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using WebApplication4.Models;
-using WebApplication4.Models.AccountViewModels;
-using WebApplication4.Services;
+using WebApplication5.Models;
+using WebApplication5.Models.AccountViewModels;
+using WebApplication5.Services;
+using static WebApplication4.Data.RolesData;
+using WebApplication4.Data;
 
-namespace WebApplication4.Controllers
+namespace WebApplication5.Controllers
 {
     [Authorize]
     public class AccountController : Controller
@@ -107,6 +109,7 @@ namespace WebApplication4.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
+                
                 if (result.Succeeded)
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
@@ -115,6 +118,8 @@ namespace WebApplication4.Controllers
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+                    string role = (_userManager.Users.Count() == 1) ? getRole(IRoles.Administrator) : getRole(IRoles.User) ;
+                    await _userManager.AddToRoleAsync(user, role);
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);

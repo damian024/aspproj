@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication4.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class EventSponsorsController : Controller
     {
         private readonly EventsDbContext _context;

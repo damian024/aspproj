@@ -6,7 +6,9 @@ namespace WebApplication1.Models
     {
         [Key]
         public int EventSponsorID { get; set; }
+        [Required]
         public int EventID { get; set; }
+        [Required]
         public int SponsorID { get; set; }
 
         public Event Event { get; set; }

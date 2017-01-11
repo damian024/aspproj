@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WebApplication4.Models;
-using WebApplication4.Models.ManageViewModels;
-using WebApplication4.Services;
+using WebApplication5.Models;
+using WebApplication5.Models.ManageViewModels;
+using WebApplication5.Services;
 
-namespace WebApplication4.Controllers
+namespace WebApplication5.Controllers
 {
     [Authorize]
     public class ManageController : Controller

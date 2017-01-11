@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models
@@ -7,8 +8,10 @@ namespace WebApplication1.Models
     {
         [Key]
         public int ID { get; set; }
-        public int Name { get; set; }
-        public int About { get; set; }
+        [Required]
+        public string Name { get; set; }
+        [DisplayName("Opis")]
+        public string About { get; set; }
 
         ICollection<Sponsor> Sponsors { get; set; }
 

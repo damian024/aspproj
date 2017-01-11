@@ -1,0 +1,33 @@
+﻿v<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">WebApplication5</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                
+                
+                <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+
+                @if (User.IsInRole("User") || User.IsInRole("Administrator"))
+                {
+                    <li><a asp-area="" asp-controller="Events" asp-action="Index">Events</a></li>
+                }
+
+                @if (User.IsInRole("Administrator"))
+                {
+                    <li><a asp-area="" asp-controller="Sponsors" asp-action="Index">Sponsors</a></li>
+                    <li><a asp-area="" asp-controller="Branches" asp-action="Index">Branchest</a></li>
+                    <li><a asp-area="" asp-controller="EventSponsors" asp-action="Index">EventSponsors</a></li>
+                }
+            </ul>
+            @await Html.PartialAsync("_LoginPartial")
+        </div>
+    </div>
+</div>

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication4.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class SponsorsController : Controller
     {
         private readonly EventsDbContext _context;
@@ -20,10 +22,21 @@ namespace WebApplication4.Controllers
         }
 
         // GET: Sponsors
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            var eventsDbContext = _context.Sponsors.Include(s => s.Branch);
-            return View(await eventsDbContext.ToListAsync());
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            var sponsors = from s in _context.Sponsors
+                           select s;
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    sponsors = sponsors.OrderByDescending(s => s.Name);
+                    break;
+                default:
+                    sponsors = sponsors.OrderBy(s => s.Name);
+                    break;
+            }
+            return View(await sponsors.AsNoTracking().ToListAsync());
         }
 
         // GET: Sponsors/Details/5
@@ -55,7 +68,7 @@ namespace WebApplication4.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,About,BranchID,Name")] Sponsor sponsor)
+        public async Task<IActionResult> Create([Bind("ID,About,BranchID,Name,Nip,Regon")] Sponsor sponsor)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +102,7 @@ namespace WebApplication4.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,About,BranchID,Name")] Sponsor sponsor)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,About,BranchID,Name,Nip,Regon")] Sponsor sponsor)
         {
             if (id != sponsor.ID)
             {

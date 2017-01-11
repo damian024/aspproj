@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication4.Controllers
 {
+    [Authorize]
     public class EventsController : Controller
     {
         private readonly EventsDbContext _context;
@@ -20,12 +22,33 @@ namespace WebApplication4.Controllers
         }
 
         // GET: Events
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "User, Administrator")]
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.Events.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            var events = from s in _context.Events
+                           select s;
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    events = events.OrderByDescending(s => s.Name);
+                    break;
+                case "Date":
+                    events = events.OrderBy(s => s.StartDate);
+                    break;
+                case "date_desc":
+                    events = events.OrderByDescending(s => s.StartDate);
+                    break;
+                default:
+                    events = events.OrderBy(s => s.Name);
+                    break;
+            }
+            return View(await events.AsNoTracking().ToListAsync());
         }
 
         // GET: Events/Details/5
+        [Authorize(Roles = "User, Administrator")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -52,6 +75,7 @@ namespace WebApplication4.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,About,Name,StartDate")] Event @event)
         {
@@ -65,6 +89,7 @@ namespace WebApplication4.Controllers
         }
 
         // GET: Events/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,6 +109,7 @@ namespace WebApplication4.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,About,Name,StartDate")] Event @event)
         {
@@ -116,6 +142,7 @@ namespace WebApplication4.Controllers
         }
 
         // GET: Events/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,6 +161,7 @@ namespace WebApplication4.Controllers
 
         // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Administrator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

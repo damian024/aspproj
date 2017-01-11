@@ -20,9 +20,21 @@ namespace WebApplication4.Controllers
         }
 
         // GET: Branches
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.Branches.ToListAsync());
+            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            var branches = from s in _context.Branches
+                         select s;
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    branches = branches.OrderByDescending(s => s.Name);
+                    break;
+                default:
+                    branches = branches.OrderBy(s => s.Name);
+                    break;
+            }
+            return View(await branches.AsNoTracking().ToListAsync());
         }
 
         // GET: Branches/Details/5
