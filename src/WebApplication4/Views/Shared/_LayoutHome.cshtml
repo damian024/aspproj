@@ -4,11 +4,13 @@
     <style>
         body {
             background-color: #ffffff;
-            background-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,0.65) 100%), url('http://previews.123rf.com/images/snake3d/snake3d1107/snake3d110700070/10071519-Balloons-party-happy-birthday-decoration-multicolored-translucent-Joy-fun-abstract-Holiday-anniversa-Stock-Photo.jpg');
+            background-image: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,0.75) 100%), url('http://previews.123rf.com/images/artqu/artqu1305/artqu130500233/19466676-Abstract-musical-background-for-music-event-design-Stock-Vector.jpg');
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-position: center;
-
+        }
+        .navbar li {
+            color: #d811ee;
         }
     </style>
 
@@ -29,7 +31,7 @@
     @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
 <body>
-   @await Html.PartialAsync("_NavigationBar")
+    @await Html.PartialAsync("_NavigationBar")
     <div class="container body-content">
         @RenderBody()
         <hr />

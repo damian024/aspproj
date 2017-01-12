@@ -55,8 +55,11 @@ namespace WebApplication4.Controllers
             {
                 return NotFound();
             }
-
-            var @event = await _context.Events.SingleOrDefaultAsync(m => m.ID == id);
+            var @event = await _context.Events
+       .Include(s => s.EventSponsors)
+           .ThenInclude(e => e.Sponsor)
+       .AsNoTracking()
+       .SingleOrDefaultAsync(m => m.ID == id);
             if (@event == null)
             {
                 return NotFound();

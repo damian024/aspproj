@@ -20,12 +20,13 @@
             </th>
 
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewBag.DateSortParm"> @Html.DisplayNameFor(model => model.StartDate) </a>
+                @Html.DisplayNameFor(model => model.About)
             </th>
 
             <th>
-                 @Html.DisplayNameFor(model => model.About) 
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.DateSortParm"> @Html.DisplayNameFor(model => model.StartDate) </a>
             </th>
+
 
         </tr>
     </thead>

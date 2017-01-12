@@ -59,7 +59,7 @@ namespace WebApplication4.Controllers
         // GET: Sponsors/Create
         public IActionResult Create()
         {
-            ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "ID");
+            ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "Name");
             return View();
         }
 
@@ -76,7 +76,7 @@ namespace WebApplication4.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "ID", sponsor.BranchID);
+            ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "Name", sponsor.BranchID);
             return View(sponsor);
         }
 
@@ -93,7 +93,7 @@ namespace WebApplication4.Controllers
             {
                 return NotFound();
             }
-            ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "ID", sponsor.BranchID);
+            ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "Name", sponsor.BranchID);
             return View(sponsor);
         }
 
@@ -129,7 +129,7 @@ namespace WebApplication4.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "ID", sponsor.BranchID);
+            ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "Name", sponsor.BranchID);
             return View(sponsor);
         }
 

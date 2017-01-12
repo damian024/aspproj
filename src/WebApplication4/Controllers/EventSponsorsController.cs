@@ -46,10 +46,21 @@ namespace WebApplication4.Controllers
         }
 
         // GET: EventSponsors/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            ViewData["EventID"] = new SelectList(_context.Events, "ID", "ID");
-            ViewData["SponsorID"] = new SelectList(_context.Sponsors, "ID", "ID");
+            if (id != null)
+            {
+                var ev = (from e in _context.Events where e.ID == id select e);
+                ViewData["AddingName"] = ev.Cast<Event>().FirstOrDefault().Name;
+                ViewData["EventID"] = new SelectList(_context.Events, "ID", "Name", ev);
+                ViewData["SponsorID"] = new SelectList(_context.Sponsors.Where( s => _context.EventSponsors.Select(es => es.SponsorID == s.ID && es.EventID == id).Count() == 0), "ID", "Name");
+            }
+            else
+            {
+                ViewData["EventID"] = new SelectList(_context.Events, "ID", "Name");
+                ViewData["SponsorID"] = new SelectList(_context.Sponsors, "ID", "Name");
+            }
+            
             return View();
         }
 
@@ -66,10 +77,23 @@ namespace WebApplication4.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+            ViewData["EventID"] = new SelectList(_context.Events, "ID", "Name", eventSponsor.EventID);
+            ViewData["SponsorID"] = new SelectList(_context.Sponsors, "ID", "Name", eventSponsor.SponsorID);
+            return View(eventSponsor);
+        }
+
+        /*public async Task<IActionResult> Create([Bind("EventSponsorID,EventID,SponsorID")] EventSponsor eventSponsor)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(eventSponsor);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
             ViewData["EventID"] = new SelectList(_context.Events, "ID", "ID", eventSponsor.EventID);
             ViewData["SponsorID"] = new SelectList(_context.Sponsors, "ID", "ID", eventSponsor.SponsorID);
             return View(eventSponsor);
-        }
+        }*/
 
         // GET: EventSponsors/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -84,8 +108,8 @@ namespace WebApplication4.Controllers
             {
                 return NotFound();
             }
-            ViewData["EventID"] = new SelectList(_context.Events, "ID", "ID", eventSponsor.EventID);
-            ViewData["SponsorID"] = new SelectList(_context.Sponsors, "ID", "ID", eventSponsor.SponsorID);
+            ViewData["EventID"] = new SelectList(_context.Events, "ID", "Name", eventSponsor.EventID);
+            ViewData["SponsorID"] = new SelectList(_context.Sponsors, "ID", "Name", eventSponsor.SponsorID);
             return View(eventSponsor);
         }
 
@@ -121,8 +145,8 @@ namespace WebApplication4.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["EventID"] = new SelectList(_context.Events, "ID", "ID", eventSponsor.EventID);
-            ViewData["SponsorID"] = new SelectList(_context.Sponsors, "ID", "ID", eventSponsor.SponsorID);
+            ViewData["EventID"] = new SelectList(_context.Events, "ID", "Name", eventSponsor.EventID);
+            ViewData["SponsorID"] = new SelectList(_context.Sponsors, "ID", "Name", eventSponsor.SponsorID);
             return View(eventSponsor);
         }
 
