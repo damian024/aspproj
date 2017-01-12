@@ -30,8 +30,22 @@
         <div class="form-group">
             <label asp-for="StartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger" ></span>
+                <div class='col-xs-4 input-group date' id='datetimepicker1'>
+                    <input asp-for="StartDate" class="form-control" readonly="readonly" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+                <script type="text/javascript">
+
+                    var picker = $('#datetimepicker1').datetimepicker({
+                        ignoreReadonly: true,
+                        minDate: Date.now(),
+                        sideBySide: true,
+                        format: "YYYY-MM-DD hh:mm"
+                    });
+                </script>
             </div>
         </div>
         <div class="form-group">

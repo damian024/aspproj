@@ -55,6 +55,13 @@ namespace WebApplication5
 
             services.AddMvc();
 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = System.TimeSpan.FromSeconds(10);
+            });
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication4.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "User, Administrator")]
     public class EventsController : Controller
     {
         private readonly EventsDbContext _context;

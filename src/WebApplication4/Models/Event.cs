@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication4.Validators;
 
 namespace WebApplication1.Models
 {
@@ -15,8 +16,9 @@ namespace WebApplication1.Models
         public string Name { get; set; }
         [DisplayName("About Event")]
         public string About { get; set; }
-        [DisplayName("Start")]
-        public DateTime StartDate { get; set; }
+
+        [DateValidator(ErrorMessage = "Wrong date!")]
+        public string StartDate { get; set; }
 
         public ICollection<EventSponsor> EventSponsors { get; set; }
     }

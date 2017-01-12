@@ -2,6 +2,7 @@
   "userSecretsId": "aspnet-WebApplication5-9a9b050d-13f8-4b63-9d98-acc44b1e2398",
 
   "dependencies": {
+    "Bootstrap.v3.Datetimepicker.CSS": "4.17.44",
     "Microsoft.ApplicationInsights.AspNetCore": "1.0.0",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
@@ -15,8 +16,10 @@
     "Microsoft.AspNetCore.Routing": "1.0.1",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
+    "Microsoft.AspNetCore.Session": "1.0.0",
     "Microsoft.AspNetCore.StaticFiles": "1.0.0",
     "Microsoft.EntityFrameworkCore": "1.1.0",
+    "Microsoft.EntityFrameworkCore.Relational": "1.1.0",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.0.1",
     "Microsoft.EntityFrameworkCore.SqlServer.Design": {
       "version": "1.0.1",

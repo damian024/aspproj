@@ -31,7 +31,8 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.About)
@@ -42,14 +43,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.StartDate)
             </td>
-            @if (User.IsInRole("Administrator"))
-            {
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
-            }
+            
+            <td>
+                @if (User.IsInRole("Administrator"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit </a><span> | </span>
+                    <a asp-action = "Details" asp-route-id = "@item.ID" > Details</a> <span> | </span>
+                    <a asp-action = "Delete" asp-route-id = "@item.ID" > Delete</a>
+                }
+            </td>
         </tr>
 }
     </tbody>

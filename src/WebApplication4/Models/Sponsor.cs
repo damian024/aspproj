@@ -11,7 +11,9 @@ namespace WebApplication1.Models
         public int ID { get; set; }
         [Required]
         public string Name { get; set; }
+        [Required]
         public string About { get; set; }
+        [Required]
         public int BranchID { get; set; }
 
         [DisplayName("REGON")]

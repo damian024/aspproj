@@ -33,7 +33,7 @@
                             @Html.DisplayFor(modelItem => item.Sponsor.Name)
                         </td>
                         <td>
-                            <a asp-controller="EventSponsors" asp-action="Delete"asp-route-id="@item.EventSponsorID">Delete</a>
+                            <a asp-controller="EventSponsors" asp-action="Delete"asp-route-id="@item.EventSponsorID" asp-route-backid="@Model.ID">Delete</a>
                         </td>
                     </tr>
                 }

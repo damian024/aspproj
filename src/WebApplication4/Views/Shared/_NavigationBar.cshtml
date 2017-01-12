@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">WebApplication5</a>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Event Manager</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -18,11 +18,11 @@
                 @if (User.IsInRole("User") || User.IsInRole("Administrator"))
                 {
                     <li><a asp-area="" asp-controller="Events" asp-action="Index">Events</a></li>
+                    <li><a asp-area="" asp-controller="Sponsors" asp-action="Index">Sponsors</a></li>
                 }
 
                 @if (User.IsInRole("Administrator"))
                 {
-                    <li><a asp-area="" asp-controller="Sponsors" asp-action="Index">Sponsors</a></li>
                     <li><a asp-area="" asp-controller="Branches" asp-action="Index">Branchest</a></li>
                     <li><a asp-area="" asp-controller="EventSponsors" asp-action="Index">Sponsors of events</a></li>
                 }

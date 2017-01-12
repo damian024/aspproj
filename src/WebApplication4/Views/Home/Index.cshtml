@@ -15,16 +15,28 @@
             @WebApplication4.Helpers.BackgroundHelper.MakeNote("Watch and edit and add events")
         </p>
         <p>
-            <a class="btn btn-primary" href="Events">Show events &raquo;</a>
-            <a class="btn btn-success" href="Events/Create">Add new event &raquo;</a>
+            @if (!User.IsInRole("Administrator"))
+            {
+                <a class="btn btn-primary" href="Events">Show events &raquo;</a>
+            }
+            @if (User.IsInRole("Administrator"))
+            {
+                <a class="btn btn-success" href="Events/Create">Add new event &raquo;</a>
+            }
         </p>
     </div>
     <div class="col-md-4">
         <h2>Sponsors</h2>
         <p>@WebApplication4.Helpers.BackgroundHelper.MakeNote("Watch and edit and add sponsors")</p>
         <p>
-            <a class="btn btn-primary" href="Sponsor">Show sponsors &raquo;</a>
-            <a class="btn btn-success" href="Sponsor/Create">Add new sponsor &raquo;</a>
+            @if (!User.IsInRole("Guest"))
+            {
+                <a class="btn btn-primary" href="Sponsors">Show sponsors &raquo;</a>
+            }
+            @if (User.IsInRole("Administrator"))
+            {
+                <a class="btn btn-success" href="Sponsors/Create">Add new sponsor &raquo;</a>
+            }   
         </p>
     </div>
     <div class="col-md-4">

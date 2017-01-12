@@ -7,7 +7,7 @@
 @{if (ViewBag.AddingName == null) {
         <h2>Adding sponsor to event</h2>
     }
-    else{
+    else {
         <h2>Adding new sponsor to event @ViewBag.AddingName</h2>
     }
 }
@@ -20,7 +20,7 @@
         @{if (ViewBag.AddingName == null)
             {
 
-            <label asp-for="EventID" class="col-md-2 control-label"></label>
+            <label asp-for="Event" class="col-md-2 control-label"></label>
                         <div class="col-md-10">
                             <select asp-for="EventID" class="form-control" asp-items="ViewBag.EventID"></select>
                         </div>
@@ -33,9 +33,13 @@
         }
         </div>
         <div class="form-group">
-            <label asp-for="SponsorID" class="col-md-2 control-label"></label>
+            <label asp-for="Sponsor" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <select asp-for="SponsorID" class ="form-control" asp-items="ViewBag.SponsorID"></select>
+                @{ if (ViewBag.Error != null) {
+                    <span class="text-danger">@ViewBag.Error</span>
+                    }
+                }
             </div>
         </div>
         <div class="form-group">
@@ -45,9 +49,18 @@
         </div>
     </div>
 </form>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+    @{if (ViewBag.DetailsID == null)
+        {
+            <a asp-action="Index">Back to List</a>
+        }
+        else
+        {
+            <a asp-controller="Events" asp-action="Details" asp-route-id="@ViewBag.DetailsID">Back to List</a>
+        }
+    }
+
+    
 </div>
 
 @section Scripts {

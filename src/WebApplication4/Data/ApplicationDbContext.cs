@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApplication5.Models;
+using WebApplication4.Data;
 
 namespace WebApplication5.Data
 {

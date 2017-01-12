@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication4.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "User, Administrator")]
     public class SponsorsController : Controller
     {
         private readonly EventsDbContext _context;
@@ -20,13 +20,14 @@ namespace WebApplication4.Controllers
         {
             _context = context;    
         }
-
         // GET: Sponsors
+        [Authorize(Roles = "User, Administrator")]
         public async Task<IActionResult> Index(string sortOrder)
         {
             ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            var sponsors = from s in _context.Sponsors
-                           select s;
+            var sponsors = _context.Sponsors
+              .Include(s => s.Branch)
+              .AsNoTracking();
             switch (sortOrder)
             {
                 case "name_desc":
@@ -38,7 +39,7 @@ namespace WebApplication4.Controllers
             }
             return View(await sponsors.AsNoTracking().ToListAsync());
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: Sponsors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -46,8 +47,10 @@ namespace WebApplication4.Controllers
             {
                 return NotFound();
             }
-
-            var sponsor = await _context.Sponsors.SingleOrDefaultAsync(m => m.ID == id);
+            var sponsor = await _context.Sponsors
+              .Include(s => s.Branch)
+              .AsNoTracking()
+              .SingleOrDefaultAsync(m => m.ID == id);
             if (sponsor == null)
             {
                 return NotFound();
@@ -55,7 +58,7 @@ namespace WebApplication4.Controllers
 
             return View(sponsor);
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: Sponsors/Create
         public IActionResult Create()
         {
@@ -66,6 +69,7 @@ namespace WebApplication4.Controllers
         // POST: Sponsors/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,About,BranchID,Name,Nip,Regon")] Sponsor sponsor)
@@ -79,7 +83,7 @@ namespace WebApplication4.Controllers
             ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "Name", sponsor.BranchID);
             return View(sponsor);
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: Sponsors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -96,7 +100,7 @@ namespace WebApplication4.Controllers
             ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "Name", sponsor.BranchID);
             return View(sponsor);
         }
-
+        [Authorize(Roles = "Administrator")]
         // POST: Sponsors/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -132,7 +136,7 @@ namespace WebApplication4.Controllers
             ViewData["BranchID"] = new SelectList(_context.Branches, "ID", "Name", sponsor.BranchID);
             return View(sponsor);
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: Sponsors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -149,7 +153,7 @@ namespace WebApplication4.Controllers
 
             return View(sponsor);
         }
-
+        [Authorize(Roles = "Administrator")]
         // POST: Sponsors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

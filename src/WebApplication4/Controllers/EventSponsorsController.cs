@@ -52,8 +52,9 @@ namespace WebApplication4.Controllers
             {
                 var ev = (from e in _context.Events where e.ID == id select e);
                 ViewData["AddingName"] = ev.Cast<Event>().FirstOrDefault().Name;
-                ViewData["EventID"] = new SelectList(_context.Events, "ID", "Name", ev);
-                ViewData["SponsorID"] = new SelectList(_context.Sponsors.Where( s => _context.EventSponsors.Select(es => es.SponsorID == s.ID && es.EventID == id).Count() == 0), "ID", "Name");
+                ViewData["DetailsID"] = ev.Cast<Event>().FirstOrDefault().ID;
+                ViewData["EventID"] = new SelectList(ev, "ID", "Name");
+                ViewData["SponsorID"] = new SelectList(_context.Sponsors.Where( s => _context.EventSponsors.Where(es => es.SponsorID == s.ID && es.EventID == id).Count() == 0), "ID", "Name");
             }
             else
             {
@@ -69,13 +70,20 @@ namespace WebApplication4.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EventSponsorID,EventID,SponsorID")] EventSponsor eventSponsor)
+        public async Task<IActionResult> Create(int? id,[Bind("EventSponsorID,EventID,SponsorID")] EventSponsor eventSponsor)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && _context.EventSponsors.Where(es => es.SponsorID == eventSponsor.SponsorID && es.EventID == eventSponsor.EventID).Count() == 0)
             {
                 _context.Add(eventSponsor);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if (id == null)
+                    return RedirectToAction("Index");
+                else
+                    return RedirectToAction("Details", "Events", new { id = id });
+            }
+            else
+            {
+                ViewData["Error"] = "This sponsor is already used";
             }
             ViewData["EventID"] = new SelectList(_context.Events, "ID", "Name", eventSponsor.EventID);
             ViewData["SponsorID"] = new SelectList(_context.Sponsors, "ID", "Name", eventSponsor.SponsorID);
@@ -151,8 +159,14 @@ namespace WebApplication4.Controllers
         }
 
         // GET: EventSponsors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpGet("/Delete/{id?}/{backid?}")]
+        public async Task<IActionResult> Delete(int? id, int? backid)
         {
+            if(backid != null)
+            {
+                ViewData["DetailsID"] = backid;
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -168,14 +182,17 @@ namespace WebApplication4.Controllers
         }
 
         // POST: EventSponsors/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("/Delete/{id?}/{backid?}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, int? backid)
         {
             var eventSponsor = await _context.EventSponsors.SingleOrDefaultAsync(m => m.EventSponsorID == id);
             _context.EventSponsors.Remove(eventSponsor);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            if(backid == null)
+                return RedirectToAction("Index");
+            else
+                return RedirectToAction("Details", "Events", new { id = backid });
         }
 
         private bool EventSponsorExists(int id)

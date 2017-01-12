@@ -19,7 +19,7 @@ namespace WebApplication1.Data
 
             var events = new Event[]
             {
-                new Event { Name="nowyevent",About="cosidkf",StartDate=DateTime.Parse("2002-09-01 17:30") }
+                new Event { Name="nowyevent",About="cosidkf",StartDate="2002-09-01 17:30" }
             };
             foreach (Event s in events)
             {

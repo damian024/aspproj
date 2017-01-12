@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
@@ -27,6 +28,7 @@ namespace WebApplication4.Data
                 var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 var created = await db.Database.EnsureCreatedAsync();
 
+                bool x = await db.Users.AnyAsync();
                 if (!created)
                 {
                     foreach (var role in Roles)
@@ -36,6 +38,18 @@ namespace WebApplication4.Data
                             await roleManager.CreateAsync(new IdentityRole(role));
                         }
                     }
+                }
+            }
+        }
+
+        public static void SeedRoles(DbSet<IdentityRole> dbset)
+        {
+
+            foreach (string role in Roles)
+            {
+                if(dbset.Where(r => r.Name == role).Count() == 0)
+                {
+                    dbset.Add(new IdentityRole(role));
                 }
             }
         }
